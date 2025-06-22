@@ -114,6 +114,12 @@ export default function ServicesPage() {
                 >
                   Editar
                 </a>
+                <a
+                  href={`/dashboard/projects/${slug}/services/${s.id}/history`}
+                  className="underline"
+                >
+                  Histórico
+                </a>
                 <button onClick={() => deleteService(s.id)} className="underline text-red-600">
                   Excluir
                 </button>
