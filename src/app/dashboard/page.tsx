@@ -66,7 +66,7 @@ export default function Dashboard() {
         <ul className="space-y-2">
           {projects.map((p) => (
             <li key={p.id} className="border p-2 rounded">
-              <a href={`/dashboard/projects/${p.id}`}>{p.name}</a>
+              <a href={`/dashboard/projects/${p.slug}/services`}>{p.name}</a>
             </li>
           ))}
         </ul>
