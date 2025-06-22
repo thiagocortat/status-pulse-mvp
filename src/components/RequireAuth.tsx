@@ -1,17 +1,18 @@
 'use client'
-import { useSession } from '@supabase/auth-helpers-react'
+import { useSessionContext } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function RequireAuth({ children }: { children: React.ReactNode }) {
-  const session = useSession()
+  const { session, isLoading } = useSessionContext()
   const router = useRouter()
   useEffect(() => {
-    if (session === null) {
+    if (!isLoading && session === null) {
       router.replace('/login')
     }
-  }, [session, router])
+  }, [session, isLoading, router])
 
+  if (isLoading) return null
   if (!session) return null
   return <>{children}</>
 }
