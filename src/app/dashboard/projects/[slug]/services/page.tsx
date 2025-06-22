@@ -29,21 +29,25 @@ export default function ServicesPage() {
   useEffect(() => {
     const load = async () => {
       if (!user || !slug) return
-      const { data: proj } = await supabase
+      console.log('loading project', { slug, user })
+      const { data: proj, error: projError } = await supabase
         .from('projects')
         .select('id,name,user_id')
         .eq('slug', slug)
         .single()
+      console.log('project result', { proj, projError })
       if (!proj || proj.user_id !== user.id) {
+        console.warn('Project not found or unauthorized', { proj, userId: user.id })
         alert('Projeto não encontrado')
         router.replace('/dashboard')
         return
       }
       setProject(proj)
-      const { data: servs } = await supabase
+      const { data: servs, error: servsError } = await supabase
         .from('services')
         .select('id,name,status,last_checked_at')
         .eq('project_id', proj.id)
+      console.log('services result', { servs, servsError })
       setServices(servs || [])
       setLoading(false)
     }
