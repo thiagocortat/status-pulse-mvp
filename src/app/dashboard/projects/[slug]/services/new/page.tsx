@@ -3,6 +3,7 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import HeaderInputList, { Header } from '@/components/HeaderInputList'
 
 interface Project {
   id: string
@@ -21,7 +22,7 @@ export default function NewServicePage() {
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
   const [method, setMethod] = useState('GET')
-  const [headers, setHeaders] = useState('{}')
+  const [headers, setHeaders] = useState<Header[]>([])
   const [body, setBody] = useState('')
   const [expectedStatus, setExpectedStatus] = useState(200)
   const [expectedBody, setExpectedBody] = useState('')
@@ -51,13 +52,10 @@ export default function NewServicePage() {
       alert('Preencha os campos obrigatórios')
       return
     }
-    let headersObj: Record<string, string> = {}
-    try {
-      headersObj = headers ? JSON.parse(headers) : {}
-    } catch {
-      alert('Headers inválidos')
-      return
-    }
+    const headersObj: Record<string, string> = {}
+    headers.forEach((h) => {
+      if (h.key) headersObj[h.key] = h.value
+    })
     const { error } = await supabase.from('services').insert({
       project_id: project!.id,
       name,
@@ -107,12 +105,7 @@ export default function NewServicePage() {
           <option key={m}>{m}</option>
         ))}
       </select>
-      <textarea
-        className="border p-2 rounded font-mono text-sm"
-        placeholder="Headers (JSON)"
-        value={headers}
-        onChange={(e) => setHeaders(e.target.value)}
-      />
+      <HeaderInputList headers={headers} onChange={setHeaders} />
       {method !== 'GET' && (
         <textarea
           className="border p-2 rounded font-mono text-sm"
