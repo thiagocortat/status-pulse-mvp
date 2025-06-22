@@ -1,6 +1,5 @@
 'use client'
 
-import RequireAuth from '@/components/RequireAuth'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 
@@ -44,18 +43,10 @@ export default function Dashboard() {
     }
   }
 
-  const logout = () => supabase.auth.signOut()
-
   return (
-    <RequireAuth>
-      <div className="max-w-2xl mx-auto p-4 space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <button onClick={logout} className="text-sm underline">
-            Sign out
-          </button>
-        </div>
-        <form onSubmit={createProject} className="flex gap-2">
+    <div className="max-w-2xl mx-auto space-y-6">
+      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <form onSubmit={createProject} className="flex gap-2">
           <input
             placeholder="Project name"
             value={name}
@@ -80,6 +71,5 @@ export default function Dashboard() {
           ))}
         </ul>
       </div>
-    </RequireAuth>
   )
 }

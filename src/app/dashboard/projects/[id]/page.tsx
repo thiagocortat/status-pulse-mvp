@@ -1,6 +1,5 @@
 'use client'
 
-import RequireAuth from '@/components/RequireAuth'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -64,8 +63,7 @@ export default function ProjectPage() {
   }
 
   return (
-    <RequireAuth>
-      <div className="max-w-2xl mx-auto p-4 space-y-4">
+    <div className="max-w-2xl mx-auto space-y-4">
         <h1 className="text-xl font-bold">{project?.name}</h1>
         <form onSubmit={createService} className="flex flex-col gap-2">
           <input
@@ -120,6 +118,5 @@ export default function ProjectPage() {
           </tbody>
         </table>
       </div>
-    </RequireAuth>
   )
 }
