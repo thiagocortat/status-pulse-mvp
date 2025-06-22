@@ -3,6 +3,7 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import RequestBodyInput from '@/components/RequestBodyInput'
 
 interface Project {
   id: string
@@ -142,11 +143,9 @@ export default function EditServicePage() {
         onChange={(e) => setHeaders(e.target.value)}
       />
       {method !== 'GET' && (
-        <textarea
-          className="border p-2 rounded font-mono text-sm"
-          placeholder="Body"
+        <RequestBodyInput
           value={body}
-          onChange={(e) => setBody(e.target.value)}
+          onChange={(val) => setBody(val)}
         />
       )}
       <input

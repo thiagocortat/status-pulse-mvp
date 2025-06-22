@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import HeaderInputList, { Header } from '@/components/HeaderInputList'
 import TestConfigurationButton from '@/components/TestConfigurationButton'
+import RequestBodyInput from '@/components/RequestBodyInput'
 
 interface Project {
   id: string
@@ -108,11 +109,9 @@ export default function NewServicePage() {
       </select>
       <HeaderInputList headers={headers} onChange={setHeaders} />
       {method !== 'GET' && (
-        <textarea
-          className="border p-2 rounded font-mono text-sm"
-          placeholder="Body"
+        <RequestBodyInput
           value={body}
-          onChange={(e) => setBody(e.target.value)}
+          onChange={(val) => setBody(val)}
         />
       )}
       <input
