@@ -1,20 +1,39 @@
 'use client'
 
-import { useState } from 'react'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useEffect, useState } from 'react'
+import {
+  useSupabaseClient,
+  useSession,
+} from '@supabase/auth-helpers-react'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const supabase = useSupabaseClient()
+  const session = useSession()
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [sending, setSending] = useState(false)
+
+  useEffect(() => {
+    console.log('login page session', session)
+    if (session) {
+      console.log('redirecting to /dashboard')
+      router.replace('/dashboard')
+    }
+  }, [session, router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setSending(true)
-    const { error } = await supabase.auth.signInWithOtp({ email })
+    console.log('sending magic link', email)
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${location.origin}/login` },
+    })
     if (!error) {
       alert('Check your email for the magic link.')
     } else {
+      console.error('magic link error', error)
       alert(error.message)
     }
     setSending(false)
