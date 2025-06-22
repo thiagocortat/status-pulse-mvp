@@ -67,12 +67,20 @@ export default function ServicesPage() {
     <div className="space-y-4 max-w-2xl mx-auto">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{project.name}</h1>
-        <a
-          href={`/dashboard/projects/${slug}/services/new`}
-          className="bg-black text-white px-3 py-1 rounded"
-        >
-          Novo Serviço
-        </a>
+        <div className="space-x-2">
+          <a
+            href={`/dashboard/projects/${slug}/incidents`}
+            className="underline text-sm"
+          >
+            Incidentes
+          </a>
+          <a
+            href={`/dashboard/projects/${slug}/services/new`}
+            className="bg-black text-white px-3 py-1 rounded"
+          >
+            Novo Serviço
+          </a>
+        </div>
       </div>
       <table className="w-full border text-sm">
         <thead>
