@@ -1,6 +1,24 @@
 # Status Pulse MVP
 
+
 Aplicação SaaS para monitoramento de serviços utilizando Next.js, TypeScript, TailwindCSS e Supabase.
+This project requires environment variables for Supabase configuration. Copy the
+provided `.env.example` file to `.env.local` and update the values with your
+credentials:
+
+```bash
+cp .env.example .env.local
+```
+
+The variables included are:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+These variables are used in the codebase to connect to Supabase services.
+
 
 ## Configuração
 
@@ -30,3 +48,4 @@ A aplicação estará disponível em `http://localhost:3000`.
 ## Deploy
 
 Este projeto está pronto para ser implantado na Vercel. Configure as variáveis de ambiente e as funções edge/crons conforme sua necessidade.
+
