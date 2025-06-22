@@ -84,8 +84,13 @@ async function getData(slug: string) {
   }
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const data = await getData(params.slug)
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const data = await getData(slug)
   if (!data) {
     notFound()
   }
@@ -93,7 +98,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const serviceMap = new Map(data.services.map((s) => [s.id, s.name]))
   const lastCheckText = data.lastCheck ? timeAgo(new Date(data.lastCheck)) : null
   const baseUrl = process.env.NEXT_PUBLIC_STATUS_BASE_URL || ''
-  const publicUrl = `${baseUrl}/status/${params.slug}`
+  const publicUrl = `${baseUrl}/status/${slug}`
 
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-6">
