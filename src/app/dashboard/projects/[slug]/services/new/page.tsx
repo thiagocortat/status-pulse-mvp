@@ -4,6 +4,7 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import HeaderInputList, { Header } from '@/components/HeaderInputList'
+import TestConfigurationButton from '@/components/TestConfigurationButton'
 
 interface Project {
   id: string
@@ -126,6 +127,14 @@ export default function NewServicePage() {
         placeholder="Substring esperada (opcional)"
         value={expectedBody}
         onChange={(e) => setExpectedBody(e.target.value)}
+      />
+      <TestConfigurationButton
+        url={url}
+        method={method}
+        headers={headers}
+        body={body}
+        expectedStatus={expectedStatus}
+        expectedBody={expectedBody}
       />
       <button className="bg-black text-white p-2 rounded" type="submit">
         Salvar
