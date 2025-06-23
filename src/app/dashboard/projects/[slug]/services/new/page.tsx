@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import HeaderInputList, { Header } from '@/components/HeaderInputList'
 import TestConfigurationButton from '@/components/TestConfigurationButton'
 import RequestBodyInput from '@/components/RequestBodyInput'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 interface Project {
   id: string
@@ -75,31 +76,31 @@ export default function NewServicePage() {
     }
   }
 
-  if (loading) return <div>Carregando...</div>
+  if (loading) return <LoadingSpinner />
   if (!project) return null
 
   return (
     <form
       onSubmit={save}
-      className="max-w-2xl mx-auto flex flex-col gap-2"
+      className="max-w-2xl mx-auto flex flex-col gap-4 bg-white rounded-xl shadow-sm p-4"
     >
       <h1 className="text-xl font-bold">Novo serviço em {project.name}</h1>
       <input
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Nome"
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
       />
       <input
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="URL"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         required
       />
       <select
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         value={method}
         onChange={(e) => setMethod(e.target.value)}
       >
@@ -116,13 +117,13 @@ export default function NewServicePage() {
       )}
       <input
         type="number"
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Status esperado"
         value={expectedStatus}
         onChange={(e) => setExpectedStatus(Number(e.target.value))}
       />
       <input
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Substring esperada (opcional)"
         value={expectedBody}
         onChange={(e) => setExpectedBody(e.target.value)}
@@ -135,7 +136,7 @@ export default function NewServicePage() {
         expectedStatus={expectedStatus}
         expectedBody={expectedBody}
       />
-      <button className="bg-black text-white p-2 rounded" type="submit">
+      <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg" type="submit">
         Salvar
       </button>
     </form>

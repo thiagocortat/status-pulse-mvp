@@ -4,6 +4,7 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import RequestBodyInput from '@/components/RequestBodyInput'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 interface Project {
   id: string
@@ -104,31 +105,31 @@ export default function EditServicePage() {
     }
   }
 
-  if (loading) return <div>Carregando...</div>
+  if (loading) return <LoadingSpinner />
   if (!project || !service) return null
 
   return (
     <form
       onSubmit={save}
-      className="max-w-2xl mx-auto flex flex-col gap-2"
+      className="max-w-2xl mx-auto flex flex-col gap-4 bg-white rounded-xl shadow-sm p-4"
     >
       <h1 className="text-xl font-bold">Editar serviço {service.name}</h1>
       <input
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Nome"
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
       />
       <input
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="URL"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         required
       />
       <select
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         value={method}
         onChange={(e) => setMethod(e.target.value)}
       >
@@ -137,7 +138,7 @@ export default function EditServicePage() {
         ))}
       </select>
       <textarea
-        className="border p-2 rounded font-mono text-sm"
+        className="border rounded-lg px-3 py-2 font-mono text-sm"
         placeholder="Headers (JSON)"
         value={headers}
         onChange={(e) => setHeaders(e.target.value)}
@@ -150,18 +151,18 @@ export default function EditServicePage() {
       )}
       <input
         type="number"
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Status esperado"
         value={expectedStatus}
         onChange={(e) => setExpectedStatus(Number(e.target.value))}
       />
       <input
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Substring esperada (opcional)"
         value={expectedBody}
         onChange={(e) => setExpectedBody(e.target.value)}
       />
-      <button className="bg-black text-white p-2 rounded" type="submit">
+      <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg" type="submit">
         Salvar
       </button>
     </form>

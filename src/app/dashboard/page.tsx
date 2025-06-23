@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<Project[]>([])
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
+  const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -44,32 +45,54 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <form onSubmit={createProject} className="flex gap-2">
+    <div className="max-w-3xl mx-auto space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Projetos</h1>
+        <button
+          type="button"
+          onClick={() => setShowForm((v) => !v)}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg"
+        >
+          {showForm ? 'Cancelar' : 'Novo Projeto'}
+        </button>
+      </div>
+
+      {showForm && (
+        <form onSubmit={createProject} className="bg-white shadow-sm rounded-xl p-4 space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <input
-            placeholder="Project name"
+            placeholder="Nome do projeto"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border p-2 rounded flex-1"
+            className="border rounded-lg px-3 py-2"
           />
           <input
             placeholder="slug"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="border p-2 rounded flex-1"
+            className="border rounded-lg px-3 py-2"
           />
-          <button type="submit" className="bg-black text-white p-2 rounded">
-            Create
-          </button>
+        </div>
+        <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg">
+          Criar
+        </button>
         </form>
-        <ul className="space-y-2">
-          {projects.map((p) => (
-            <li key={p.id} className="border p-2 rounded">
-              <a href={`/dashboard/projects/${p.slug}/services`}>{p.name}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      )}
+
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {projects.map((p) => (
+          <li key={p.id} className="border rounded-xl p-4 shadow-sm bg-white">
+            <a href={`/dashboard/projects/${p.slug}/services`} className="font-medium hover:underline">
+              {p.name}
+            </a>
+          </li>
+        ))}
+        {projects.length === 0 && (
+          <li className="col-span-full">
+            <p className="text-sm text-gray-500">Nenhum projeto cadastrado.</p>
+          </li>
+        )}
+      </ul>
+    </div>
   )
 }

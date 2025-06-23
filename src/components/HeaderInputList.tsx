@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import { X } from 'lucide-react'
 
 export type Header = { key: string; value: string }
 
@@ -38,13 +38,13 @@ export default function HeaderInputList({ headers, onChange }: HeaderInputListPr
       {rows.map((h, idx) => (
         <div className="grid grid-cols-[1fr_1fr_auto] gap-2" key={idx}>
           <input
-            className="border p-2 rounded"
+            className="border rounded-lg px-3 py-2 text-sm"
             placeholder="Authorization"
             value={h.key}
             onChange={(e) => update(idx, 'key', e.target.value)}
           />
           <input
-            className="border p-2 rounded"
+            className="border rounded-lg px-3 py-2 text-sm"
             placeholder="Bearer abc123"
             value={h.value}
             onChange={(e) => update(idx, 'value', e.target.value)}
@@ -53,9 +53,9 @@ export default function HeaderInputList({ headers, onChange }: HeaderInputListPr
             <button
               type="button"
               onClick={() => remove(idx)}
-              className="text-red-600 px-2"
+              className="text-red-600 hover:text-red-800 p-1"
             >
-              &times;
+              <X className="w-4 h-4" />
             </button>
           )}
         </div>

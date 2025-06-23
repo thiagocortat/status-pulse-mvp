@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
 import { notFound } from 'next/navigation'
+import StatusBadge from '@/components/StatusBadge'
 
 const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -112,49 +113,24 @@ export default async function Page({
 
       <div className="space-y-2">
         <h2 className="font-semibold">Serviços monitorados</h2>
-        <table className="w-full border text-sm">
-          <thead>
-            <tr className="border-b">
-              <th className="p-2 text-left">Serviço</th>
-              <th className="p-2">Status</th>
-              <th className="p-2">Última checagem</th>
-              <th className="p-2">Histórico</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.services.map((s) => (
-              <tr key={s.id} className="border-b">
-                <td className="p-2">{s.name}</td>
-                <td className="p-2">
-                  <span
-                    className={`px-2 py-1 rounded text-white ${
-                      s.status === 'online'
-                        ? 'bg-green-500'
-                        : s.status === 'degraded'
-                        ? 'bg-yellow-500'
-                        : 'bg-red-500'
-                    }`}
-                  >
-                    {s.status ?? 'desconhecido'}
-                  </span>
-                </td>
-                <td className="p-2">
-                  {s.last_checked_at
-                    ? new Date(s.last_checked_at).toLocaleString()
-                    : '-'}
-                </td>
-                <td className="p-2 text-center">
-                  <a
-                    href={`/dashboard/projects/${slug}/services/${s.id}/history`}
-                    className="underline"
-                  >
-                    Histórico
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="space-y-2">
+          {data.services.map((s) => (
+            <div key={s.id} className="border rounded-xl p-4 flex justify-between items-center bg-white shadow-sm">
+              <div>
+                <p className="font-medium">{s.name}</p>
+                <p className="text-sm text-gray-500">
+                  {s.last_checked_at ? new Date(s.last_checked_at).toLocaleString() : '-'}
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <StatusBadge status={s.status} />
+                <a href={`/dashboard/projects/${slug}/services/${s.id}/history`} className="text-sm underline">
+                  Histórico
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -164,11 +140,15 @@ export default async function Page({
         )}
         <ul className="space-y-2">
           {data.incidents.map((i) => (
-            <li key={i.id} className="border p-2 rounded">
-              <p className="font-semibold">{i.title}</p>
-              <p className="text-sm">Serviço: {serviceMap.get(i.service_id) || i.service_id}</p>
-              <p className="text-sm">Iniciado em {new Date(i.started_at).toLocaleString()}</p>
-              <p className="text-sm">Status: {i.status}</p>
+            <li key={i.id} className="border p-4 rounded-xl bg-white shadow-sm">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-semibold">{i.title}</p>
+                  <p className="text-sm">Serviço: {serviceMap.get(i.service_id) || i.service_id}</p>
+                  <p className="text-sm">Iniciado em {new Date(i.started_at).toLocaleString()}</p>
+                </div>
+                <StatusBadge status={i.status} />
+              </div>
             </li>
           ))}
         </ul>
