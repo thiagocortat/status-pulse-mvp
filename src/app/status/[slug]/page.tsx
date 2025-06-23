@@ -118,6 +118,7 @@ export default async function Page({
               <th className="p-2 text-left">Serviço</th>
               <th className="p-2">Status</th>
               <th className="p-2">Última checagem</th>
+              <th className="p-2">Histórico</th>
             </tr>
           </thead>
           <tbody>
@@ -141,6 +142,14 @@ export default async function Page({
                   {s.last_checked_at
                     ? new Date(s.last_checked_at).toLocaleString()
                     : '-'}
+                </td>
+                <td className="p-2 text-center">
+                  <a
+                    href={`/dashboard/projects/${slug}/services/${s.id}/history`}
+                    className="underline"
+                  >
+                    Histórico
+                  </a>
                 </td>
               </tr>
             ))}

@@ -25,6 +25,7 @@ export default function ServicesPage() {
   const [project, setProject] = useState<Project | null>(null)
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
+  const publicUrl = `${process.env.NEXT_PUBLIC_STATUS_BASE_URL || ''}/status/${slug}`
 
   useEffect(() => {
     const load = async () => {
@@ -73,6 +74,12 @@ export default function ServicesPage() {
             className="underline text-sm"
           >
             Incidentes
+          </a>
+          <a
+            href={publicUrl}
+            className="underline text-sm"
+          >
+            Página Pública
           </a>
           <a
             href={`/dashboard/projects/${slug}/services/new`}
