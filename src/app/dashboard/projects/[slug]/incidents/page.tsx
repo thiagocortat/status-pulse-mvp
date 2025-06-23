@@ -3,6 +3,9 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import StatusBadge from '@/components/StatusBadge'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import EmptyState from '@/components/EmptyState'
 
 interface Project {
   id: string
@@ -119,11 +122,11 @@ export default function IncidentsPage() {
     }
   }
 
-  if (loading) return <div>Carregando...</div>
+  if (loading) return <LoadingSpinner />
   if (!project) return null
 
   return (
-    <div className="space-y-4 max-w-2xl mx-auto">
+    <div className="space-y-4 max-w-3xl mx-auto">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{project.name} - Incidentes</h1>
         <div className="space-x-2">
@@ -135,7 +138,7 @@ export default function IncidentsPage() {
           </a>
           <a
             href={`/dashboard/projects/${slug}/incidents/new`}
-            className="bg-black text-white px-3 py-1 rounded"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg"
           >
             Novo Incidente
           </a>
@@ -144,12 +147,10 @@ export default function IncidentsPage() {
 
       <div>
         <h2 className="font-semibold mb-2">Abertos</h2>
-        {openIncidents.length === 0 && (
-          <p className="text-sm text-gray-500">Nenhum incidente aberto.</p>
-        )}
+        {openIncidents.length === 0 && <EmptyState>Nenhum incidente aberto.</EmptyState>}
         <ul className="space-y-2">
           {openIncidents.map((i) => (
-            <li key={i.id} className="border p-2 rounded">
+            <li key={i.id} className="border p-4 rounded-xl bg-white shadow-sm">
               <div className="flex justify-between items-start">
                 <div>
                   <p className="font-semibold">{i.title}</p>
@@ -164,9 +165,7 @@ export default function IncidentsPage() {
                   )}
                 </div>
                 <div className="space-y-2 text-right">
-                  <span className="px-2 py-1 rounded text-white bg-red-500 text-sm">
-                    aberto
-                  </span>
+                  <StatusBadge status="offline" />
                   <div className="space-x-2 text-sm">
                     <button
                       onClick={() => toggle(i.id)}
@@ -177,9 +176,9 @@ export default function IncidentsPage() {
                     <button
                       onClick={() => closeIncident(i.id)}
                       className="underline text-green-600"
-                    >
+                      >
                       Encerrar
-                    </button>
+                      </button>
                   </div>
                 </div>
               </div>
@@ -190,12 +189,10 @@ export default function IncidentsPage() {
 
       <div>
         <h2 className="font-semibold mb-2">Resolvidos</h2>
-        {resolvedIncidents.length === 0 && (
-          <p className="text-sm text-gray-500">Nenhum incidente resolvido.</p>
-        )}
+        {resolvedIncidents.length === 0 && <EmptyState>Nenhum incidente resolvido.</EmptyState>}
         <ul className="space-y-2">
           {resolvedIncidents.map((i) => (
-            <li key={i.id} className="border p-2 rounded">
+            <li key={i.id} className="border p-4 rounded-xl bg-white shadow-sm">
               <div className="flex justify-between items-start">
                 <div>
                   <p className="font-semibold">{i.title}</p>
@@ -213,9 +210,7 @@ export default function IncidentsPage() {
                   )}
                 </div>
                 <div className="space-y-2 text-right">
-                  <span className="px-2 py-1 rounded text-white bg-gray-500 text-sm">
-                    resolvido
-                  </span>
+                  <StatusBadge status="online" />
                   <button
                     onClick={() => toggle(i.id)}
                     className="underline text-sm"

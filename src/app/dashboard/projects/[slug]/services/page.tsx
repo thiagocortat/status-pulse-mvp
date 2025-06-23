@@ -3,6 +3,10 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import StatusBadge from '@/components/StatusBadge'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import EmptyState from '@/components/EmptyState'
+import { PenLine, Trash2, Clock } from 'lucide-react'
 
 interface Service {
   id: string
@@ -61,11 +65,11 @@ export default function ServicesPage() {
     setServices((s) => s.filter((svc) => svc.id !== id))
   }
 
-  if (loading) return <div>Carregando...</div>
+  if (loading) return <LoadingSpinner />
   if (!project) return null
 
   return (
-    <div className="space-y-4 max-w-2xl mx-auto">
+    <div className="space-y-4 max-w-3xl mx-auto">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">{project.name}</h1>
         <div className="space-x-2">
@@ -89,52 +93,32 @@ export default function ServicesPage() {
           </a>
         </div>
       </div>
-      <table className="w-full border text-sm">
-        <thead>
-          <tr className="border-b">
-            <th className="p-2 text-left">Serviço</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Última checagem</th>
-            <th className="p-2">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {services.map((s) => (
-            <tr key={s.id} className="border-b">
-              <td className="p-2">{s.name}</td>
-              <td className="p-2">
-                <span
-                  className={`px-2 py-1 rounded text-white ${s.status === 'online' ? 'bg-green-500' : s.status === 'degraded' ? 'bg-yellow-500' : 'bg-red-500'}`}
-                >
-                  {s.status ?? 'desconhecido'}
-                </span>
-              </td>
-              <td className="p-2">
-                {s.last_checked_at
-                  ? new Date(s.last_checked_at).toLocaleString()
-                  : '-'}
-              </td>
-              <td className="p-2 space-x-2">
-                <a
-                  href={`/dashboard/projects/${slug}/services/${s.id}/edit`}
-                  className="underline"
-                >
-                  Editar
-                </a>
-                <a
-                  href={`/dashboard/projects/${slug}/services/${s.id}/history`}
-                  className="underline"
-                >
-                  Histórico
-                </a>
-                <button onClick={() => deleteService(s.id)} className="underline text-red-600">
-                  Excluir
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="grid grid-cols-1 gap-4">
+        {services.map((s) => (
+          <div key={s.id} className="border rounded-xl bg-white p-4 shadow-sm flex justify-between items-start">
+            <div>
+              <p className="font-medium">{s.name}</p>
+              <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
+                <Clock className="w-4 h-4" />
+                {s.last_checked_at ? new Date(s.last_checked_at).toLocaleString() : '-'}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <StatusBadge status={s.status} />
+              <a href={`/dashboard/projects/${slug}/services/${s.id}/history`} className="text-sm text-gray-600 hover:underline">
+                Histórico
+              </a>
+              <a href={`/dashboard/projects/${slug}/services/${s.id}/edit`} className="p-1 text-gray-600 hover:text-gray-800">
+                <PenLine className="w-4 h-4" />
+              </a>
+              <button onClick={() => deleteService(s.id)} className="p-1 text-red-600 hover:text-red-800">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ))}
+        {services.length === 0 && <EmptyState>Nenhum serviço cadastrado.</EmptyState>}
+      </div>
     </div>
   )
 }

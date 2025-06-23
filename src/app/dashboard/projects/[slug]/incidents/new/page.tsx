@@ -3,6 +3,7 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 interface Project {
   id: string
@@ -73,14 +74,14 @@ export default function NewIncidentPage() {
     }
   }
 
-  if (loading) return <div>Carregando...</div>
+  if (loading) return <LoadingSpinner />
   if (!project) return null
 
   return (
-    <form onSubmit={save} className="max-w-2xl mx-auto flex flex-col gap-2">
+    <form onSubmit={save} className="max-w-2xl mx-auto flex flex-col gap-4 bg-white rounded-xl shadow-sm p-4">
       <h1 className="text-xl font-bold">Novo incidente em {project.name}</h1>
       <select
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         value={serviceId}
         onChange={(e) => setServiceId(e.target.value)}
         required
@@ -92,25 +93,25 @@ export default function NewIncidentPage() {
         ))}
       </select>
       <input
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Título"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
       />
       <textarea
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         placeholder="Descrição"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
       <input
         type="datetime-local"
-        className="border p-2 rounded"
+        className="border rounded-lg px-3 py-2"
         value={startedAt}
         onChange={(e) => setStartedAt(e.target.value)}
       />
-      <button type="submit" className="bg-black text-white p-2 rounded">
+      <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg">
         Salvar
       </button>
     </form>
