@@ -2,6 +2,8 @@
 
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
+import { Trash2 } from 'lucide-react'
+import Toast from '@/components/Toast'
 
 interface Project {
   id: string
@@ -16,6 +18,7 @@ export default function Dashboard() {
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [showForm, setShowForm] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
 
   useEffect(() => {
     if (user) {
@@ -41,6 +44,26 @@ export default function Dashboard() {
       setSlug('')
     } else if (error) {
       alert(error.message)
+    }
+  }
+
+  const deleteProject = async (project: Project) => {
+    if (
+      !confirm(
+        `Tem certeza que deseja excluir o projeto '${project.name}'? Esta ação não pode ser desfeita.`,
+      )
+    )
+      return
+    const { error } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', project.id)
+      .eq('user_id', user?.id || '')
+    if (!error) {
+      setProjects((projs) => projs.filter((p) => p.id !== project.id))
+      setToast('Projeto excluído com sucesso.')
+    } else {
+      setToast('Erro ao excluir projeto.')
     }
   }
 
@@ -81,10 +104,22 @@ export default function Dashboard() {
 
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {projects.map((p) => (
-          <li key={p.id} className="border rounded-xl p-4 shadow-sm bg-white">
-            <a href={`/dashboard/projects/${p.slug}/services`} className="font-medium hover:underline">
+          <li
+            key={p.id}
+            className="border rounded-xl p-4 shadow-sm bg-white flex justify-between items-start group"
+          >
+            <a
+              href={`/dashboard/projects/${p.slug}/services`}
+              className="font-medium hover:underline"
+            >
               {p.name}
             </a>
+            <button
+              onClick={() => deleteProject(p)}
+              className="hidden group-hover:block p-1 text-red-500 hover:text-red-700"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
           </li>
         ))}
         {projects.length === 0 && (
@@ -93,6 +128,7 @@ export default function Dashboard() {
           </li>
         )}
       </ul>
+      <Toast message={toast} onClear={() => setToast(null)} />
     </div>
   )
 }
